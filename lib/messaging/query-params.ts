@@ -31,8 +31,8 @@ export const ZodQueryParamsSchema = z.object({
   search: z.string().optional(),
   pagination: z
     .object({
-      take: z.number().optional(),
-      skip: z.number().optional(),
+      take: z.coerce.number().optional(),
+      skip: z.coerce.number().optional(),
     })
     .optional(),
 });
