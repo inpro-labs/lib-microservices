@@ -1,5 +1,5 @@
 import { PipeTransform, Injectable } from '@nestjs/common';
-import { ZodError, ZodSchema } from 'zod';
+import { ZodSchema } from 'zod';
 import { MicroserviceRequest } from '../interfaces/microservice-request';
 import { ApplicationException } from '../exceptions/application-exception';
 
@@ -31,18 +31,23 @@ export class ZodValidationPipe<T extends ZodSchema<unknown>>
    * @throws {ApplicationException} If validation fails.
    */
   transform(payload: MicroserviceRequest): MicroserviceRequest {
-    try {
-      const validatedData = this.schema.parse(payload.data);
+    const result = this.schema.safeParse(payload.data);
 
-      payload.data = validatedData;
+    if (!result.success) {
+      const firstError = result.error.errors[0];
 
-      return payload;
-    } catch (error) {
-      throw new ApplicationException(
-        (error as ZodError).errors[0].message,
-        400,
-        'VALIDATION_ERROR',
-      );
+      const fieldPath = firstError.path.join('.');
+      const errorMessage = firstError.message;
+
+      const finalMessage = fieldPath
+        ? `Field '${fieldPath}': ${errorMessage}`
+        : errorMessage;
+
+      throw new ApplicationException(finalMessage, 400, 'VALIDATION_ERROR');
     }
+
+    payload.data = result.data;
+
+    return payload;
   }
 }
