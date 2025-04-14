@@ -17,6 +17,11 @@ jobs:
           node-version: 22.x
           registry-url: https://npm.pkg.github.com/
 
+      - name: Configure npm authentication
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > .npmrc
+          echo "@inpro-labs:registry=https://npm.pkg.github.com/" >> .npmrc
+
       - name: Install dependencies
         run: npm install
 
