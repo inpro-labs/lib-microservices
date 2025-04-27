@@ -1,4 +1,4 @@
-import { ClientProxy } from '@nestjs/microservices';
+import { ClientKafkaProxy } from '@nestjs/microservices';
 import { ApplicationException } from '../exceptions/application-exception';
 import { MicroserviceRequest } from '../interfaces/microservice-request';
 import { Result, Err, Ok } from '@inpro-labs/core';
@@ -12,17 +12,17 @@ export class ClientService {
   /**
    * Creates an instance of ClientService.
    *
-   * @param {ClientProxy} client - The microservice client proxy used to send messages.
+   * @param {ClientKafkaProxy} client - The microservice client proxy used to send messages.
    */
-  constructor(private readonly client: ClientProxy) {}
+  constructor(private readonly client: ClientKafkaProxy) {}
 
   /**
    * Factory method to create a new ClientService from a ClientProxy.
    *
    * @returns {(clientProxy: ClientProxy) => ClientService} A function that takes a ClientProxy and returns a ClientService.
    */
-  static fromFactory(): (clientProxy: ClientProxy) => ClientService {
-    return (clientProxy: ClientProxy) => new ClientService(clientProxy);
+  static fromFactory(): (clientProxy: ClientKafkaProxy) => ClientService {
+    return (clientProxy: ClientKafkaProxy) => new ClientService(clientProxy);
   }
 
   /**
