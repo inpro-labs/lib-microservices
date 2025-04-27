@@ -1,11 +1,11 @@
 import { ClientService } from '../../../lib/messaging/client-service';
-import { ClientKafkaProxy, ClientProxy } from '@nestjs/microservices';
+import { ClientProxy } from '@nestjs/microservices';
 import { of, throwError, TimeoutError } from 'rxjs';
 import { ApplicationException } from '../../../lib/exceptions/application-exception';
 
 describe('ClientService', () => {
   let clientService: ClientService;
-  let clientProxyMock: jest.Mocked<ClientKafkaProxy>;
+  let clientProxyMock: jest.Mocked<ClientProxy>;
 
   beforeEach(() => {
     clientProxyMock = {
